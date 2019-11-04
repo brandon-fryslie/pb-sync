@@ -1,6 +1,6 @@
 # pb-sync
 
-A tool for PixelBlaze for managing patterns on the device
+A tool for Pixelblaze for managing patterns on the device
 
 ## Features
 
@@ -10,7 +10,7 @@ A tool for PixelBlaze for managing patterns on the device
 - Watch a directory to auto-upload patterns to the device (TODO)
 - List, enable, and disable patterns from the pattern store (TODO)
 - Upload patterns to the pattern store (TODO)
-- Provide robust, generic interface for interacting with PixelBlaze (TODO)
+- Provide robust, generic interface for interacting with Pixelblaze (TODO)
 
 ## backup
 

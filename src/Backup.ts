@@ -59,7 +59,7 @@ class Backup {
   run(pbName: string, dir: string): Rx.Observable<null> {
     return new Rx.Observable((observer) => {
       const pbBackupDir = this.checkDir(dir, pbName);
-      console.log(`Backup: Starting backup of PixelBlaze '${ pbName }' to dir '${ pbBackupDir }'`);
+      console.log(`Backup: Starting backup of Pixelblaze '${ pbName }' to dir '${ pbBackupDir }'`);
 
       this.discoveryAgent = new DiscoveryAgent;
       this.discoveryAgent.start();
@@ -70,7 +70,7 @@ class Backup {
         Util.vLog(`Backup: Controller is ready: '${ controller.config.name }'`);
         const programList = controller.patternList.getItems();
 
-        Util.vLog(`Backup: Found PixelBlaze ${ controller.config.name }.  Backing up ${ (Object.keys(programList).length) } patterns:`);
+        Util.vLog(`Backup: Found Pixelblaze ${ controller.config.name }.  Backing up ${ (Object.keys(programList).length) } patterns:`);
         for (i = 0, len = programList.length; i < len; i++) {
           ({id, name} = programList[i]);
           Util.vLog(`- ${ name } (${ id })`);
