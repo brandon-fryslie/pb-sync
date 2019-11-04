@@ -7,6 +7,9 @@ import { PixelController } from './PixelController'
 import { Observable } from "rxjs";
 import { AddressInfo } from "net";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const debug = require('debug')('DiscoveryAgent');
+
 interface IDgramMsgMetadata {
   address: string;
   family: string;
@@ -75,7 +78,7 @@ export default class DiscoveryAgent {
         return this.controllers[senderId];
       }),
       RxOp.tap((controller: PixelController) => {
-        Util.vLog(`DiscoveryAgent: PixelController object created for ${ controller.address }.  Waiting for it to become ready...`)
+        debug(`DiscoveryAgent: PixelController object created for ${ controller.address }.  Waiting for it to become ready...`)
       }),
       RxOp.flatMap((controller: PixelController) => controller.ready$())
     );
@@ -87,7 +90,7 @@ export default class DiscoveryAgent {
 
   // need this for now to prevent the whole thing from blowing up
   waitForPixelBlaze$(name: string): Rx.Observable<PixelController> {
-    Util.vLog(`DiscoveryAgent.waitForPixelBlaze: Waiting for Pixelblaze '${ name }' to become ready`);
+    debug(`DiscoveryAgent.waitForPixelBlaze: Waiting for Pixelblaze '${ name }' to become ready`);
     return this._discovery$.pipe(
       RxOp.filter((controller: PixelController) => controller.config.name === name),
       RxOp.tap(controller => console.log(`waitForPixelBlaze: Pixelblaze '${ name }' at ${ controller.address } is ready`))

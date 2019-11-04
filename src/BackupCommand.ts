@@ -5,12 +5,15 @@ import DiscoveryAgent from './DiscoveryAgent'
 import { PixelController } from "./PixelController";
 import Util from './Util'
 
-class Backup {
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const debug = require('debug')('BackupCommand');
+
+class BackupCommand {
   private discoveryAgent: DiscoveryAgent;
 
   writePatternToFile(dir: string, name: string, content: string): void {
     const path = Util.getPatternPath(dir, name);
-    Util.vLog(`Backup.writePatternToFile: Writing pattern '${ name }' to path '${ path }'`);
+    debug(`Backup.writePatternToFile: Writing pattern '${ name }' to path '${ path }'`);
     if (content[-1] !== "\n") {
       content = `${ content }\n`;
     }
@@ -18,7 +21,7 @@ class Backup {
   }
 
   backupPattern(dir: string, id: string, name: string, controller: PixelController): void {
-    Util.vLog('Backup.backupPattern: backing up', id, name);
+    debug('Backup.backupPattern: backing up', id, name);
     const pattern = controller.patternList.getByName(name);
     if (!pattern) {
       throw new Error(`ERROR: Backup.backupPattern: Pattern '${ name }' does not exist on controller '${ controller.config.name }'`);
@@ -41,7 +44,7 @@ class Backup {
       fs.mkdirSync(backupDir);
     } catch (e) {
       if (e.code === 'EEXIST') {
-        Util.vLog(`Backup.checkDir: Dir '${ backupDir }' already exists`);
+        debug(`Backup.checkDir: Dir '${ backupDir }' already exists`);
       } else {
         throw e;
       }
@@ -52,10 +55,10 @@ class Backup {
   backupPatterns(controller: PixelController, pbBackupDir: string, pbName: string, observer: Rx.Observer<void>): void {
     const programList = controller.patternList.getItems();
 
-    Util.vLog(`Backup: Found Pixelblaze ${ controller.config.name }.  Backing up ${ (Object.keys(programList).length) } patterns:`);
+    debug(`Backup: Found Pixelblaze ${ controller.config.name }.  Backing up ${ (Object.keys(programList).length) } patterns:`);
 
     programList.forEach(({id, name}) => {
-      Util.vLog(`- ${ name } (${ id })`);
+      debug(`- ${ name } (${ id })`);
     });
 
     programList.forEach(({id, name}) => {
@@ -89,7 +92,7 @@ class Backup {
       this.discoveryAgent.start();
 
       return this.discoveryAgent.waitForPixelBlaze$(pbName).subscribe((controller) => {
-        Util.vLog(`Backup: Controller is ready: '${ controller.config.name }'`);
+        debug(`Backup: Controller is ready: '${ controller.config.name }'`);
         this.backupPatterns(controller, pbBackupDir, pbName, observer);
       });
     });
@@ -97,5 +100,5 @@ class Backup {
 }
 
 
-module.exports = {Backup};
+module.exports = {Backup: BackupCommand};
 

@@ -14,7 +14,7 @@ if (ARGS.verbose) {
 const command: string = ARGS._[0];
 
 if (command == 'backup') {
-  const Backup = require('./Backup').Backup;
+  const Backup = require('./BackupCommand').Backup;
   const backup = new Backup;
   backup.run(ARGS.name, ARGS.dir).subscribe(() => {
     console.log('Backup finished!');

@@ -4,16 +4,21 @@ import fs from "fs";
 import { from, observable } from "rxjs";
 import * as Rx from "rxjs";
 
+
+
 import DiscoveryAgent from './DiscoveryAgent'
 import { PixelController } from "./PixelController";
 import Util from './Util'
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const debug = require('debug')('RestoreCommand');
 
 export default class RestoreCommand {
   private discoveryAgent: DiscoveryAgent;
 
   readPatternFromFile(dir: string, name: string, content: string): void {
     const path = Util.getPatternPath(dir, name);
-    Util.vLog(`Restore.writePatternToFile: Writing pattern '${ name }' to path '${ path }'`);
+    debug(`Restore.writePatternToFile: Writing pattern '${ name }' to path '${ path }'`);
     if (content[-1] !== "\n") {
       content = `${ content }\n`;
     }
@@ -21,7 +26,7 @@ export default class RestoreCommand {
   }
 
   restorePattern(dir: string, id: string, name: string, controller: PixelController): void {
-    Util.vLog('Restore.restorePattern: backing up', id, name);
+    debug('Restore.restorePattern: backing up', id, name);
     const pattern = controller.patternList.getByName(name);
     if (!pattern) {
       throw new Error(`ERROR: Restore.restorePattern: Pattern '${ name }' does not exist on controller '${ controller.config.name }'`);

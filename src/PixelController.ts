@@ -6,13 +6,15 @@ import LZString from "lz-string";
 import * as Rx from "rxjs";
 import * as RxOp from "rxjs/operators";
 
-import Util from './Util'
 import * as Constants from './Constants'
 import { IPatternData, IPartialPatternData } from "./IPatternData";
 
 const PacketType = Constants.PacketType;
 const PacketFrameFlags = Constants.PacketFrameFlags;
 import PatternList from "./PatternList";
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const debug = require('debug')('PixelController');
 
 // Implements the functionality necessary to interact with Pixelblaze
 // Missing the 'lastSeen' functionality from the original controller.js
@@ -140,12 +142,12 @@ export class PixelController extends EventEmitter {
 
     // Update config and sources list when they have been fetched
     this.controllerConfig$.subscribe((config: IPixelControllerConfig) => {
-      Util.vLog('PixelController: controllerConfig updated');
+      debug('PixelController: controllerConfig updated');
       this._config = config;
     });
 
     this.sourcesList$.subscribe((allSources: Array<IPatternData>) => {
-      Util.vLog('PixelController: sourcesList updated');
+      debug('PixelController: sourcesList updated');
       this.patternList.addAll(allSources);
     });
 
@@ -161,7 +163,7 @@ export class PixelController extends EventEmitter {
       RxOp.map((e: OpenEvent) => e),
       RxOp.take(1),
       RxOp.tap(() => {
-        Util.vLog(`PixelController: Websocket connected to ${ this.address }`);
+        debug(`PixelController: Websocket connected to ${ this.address }`);
       }),
     )
   }
@@ -274,7 +276,7 @@ export class PixelController extends EventEmitter {
   }
 
   sendFrame(frame: IPbFrame): void {
-    Util.vLog("PixelController: sending frame", frame);
+    debug("PixelController: sending frame", frame);
     const jsonFrame = JSON.stringify(frame);
     const isDisconnected = this.ws && this.ws.readyState !== this.ws.OPEN;
     if (isDisconnected) {
