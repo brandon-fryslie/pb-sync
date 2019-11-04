@@ -25,7 +25,7 @@ export default class DiscoveryAgent {
   private server: Socket;
   private serverListening$: Observable<undefined>;
   private serverMessage$: Observable<IDgramMsg>;
-  private discovery$: Observable<PixelController>;
+  private _discovery$: Observable<PixelController>;
 
   static PACKET_TYPES = {
     BEACONPACKET: 42,
@@ -36,12 +36,16 @@ export default class DiscoveryAgent {
     this.controllers = {};
   }
 
+  get discovery$(): Observable<PixelController> {
+    return this._discovery$
+  }
+
   start(): void {
     //    @discovery.start host: '0.0.0.0', port: 1889
     return this.createServer();
   }
 
-  createServer(opts: { port: number; host: string } = { port: null, host: null }): void {
+  private createServer(opts: { port: number; host: string } = { port: null, host: null }): void {
     const host = opts.host ? opts.host : '0.0.0.0';
     const port = opts.port ? opts.port : 1889;
 
@@ -55,7 +59,7 @@ export default class DiscoveryAgent {
       console.log(`DiscoveryAgent.createServer: Autodiscovery server listening on ${ ((this.server.address() as AddressInfo).address) }:${ ((this.server.address() as AddressInfo).port) }`);
     });
 
-    this.discovery$ = this.createDiscovery$();
+    this._discovery$ = this.createDiscovery$();
     this.server.bind(port, host);
   }
 
@@ -77,10 +81,14 @@ export default class DiscoveryAgent {
     );
   }
 
+  public subscribeToPixelblazes(fn: Function): Rx.Subscription {
+    return this._discovery$.subscribe(o => fn(o))
+  }
+
   // need this for now to prevent the whole thing from blowing up
   waitForPixelBlaze$(name: string): Rx.Observable<PixelController> {
     Util.vLog(`DiscoveryAgent.waitForPixelBlaze: Waiting for Pixelblaze '${ name }' to become ready`);
-    return this.discovery$.pipe(
+    return this._discovery$.pipe(
       RxOp.filter((controller: PixelController) => controller.config.name === name),
       RxOp.tap(controller => console.log(`waitForPixelBlaze: Pixelblaze '${ name }' at ${ controller.address } is ready`))
     );

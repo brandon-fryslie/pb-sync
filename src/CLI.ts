@@ -18,20 +18,26 @@ export const args = yargs(process.argv.slice(2))
       })
     })
   }).command({
-    command: 'restore <dir> <from-name> <to-name>',
+    command: 'restore <dir> <fromName> <toName>',
     desc: 'restore Pixelblaze patterns to a directory',
     builder: ((yargs) => {
-      yargs.positional('name', {
-        description: "the Pixelblaze's name",
+      yargs.positional('dir', {
+        description: "the pb-sync data directory",
         type: 'string',
-        demandOption: true
-      }).option('dir', {
-        alias: 'd',
+        demandOption: true,
+      }).positional('fromName', {
+        description: "the source pixelblaze",
         type: 'string',
-        description: 'the directory to use for the backup',
-        demandOption: true
+        demandOption: true,
+      }).positional('toName', {
+        description: "the destination pixelblaze",
+        type: 'string',
+        demandOption: true,
       })
     })
+  }).command({
+    command: 'list',
+    desc: 'list discoverable Pixelblazes on the network',
   }).option('verbose', {
     alias: 'v',
     type: 'boolean',

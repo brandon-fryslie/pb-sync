@@ -1,4 +1,5 @@
-import {args as ARGS} from "./CLI";
+import { args as ARGS } from "./CLI";
+import ListCommand from "./ListCommand";
 
 if (ARGS._.length == 0) {
   console.log('ERROR: no command provided');
@@ -18,8 +19,19 @@ if (command == 'backup') {
     console.log('Backup finished!');
     process.exit(0)
   });
+} else if (command == 'restore') {
+  console.log('Not implemented')
+} else if (command == 'list') {
+  const listCommand = new ListCommand;
+  listCommand.run().subscribe(() => {
+    console.log('Waited 60s.  Shutting it down');
+    process.exit(0)
+  });
+
+} else {
+  console.log(`ERROR: Unknown command '${ command }'`);
 }
 
 if (ARGS.repl) {
-  require('./repl/repl').start({useGlobal: true})
+  require('./repl/repl').start({ useGlobal: true })
 }

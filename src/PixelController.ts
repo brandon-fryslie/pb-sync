@@ -64,6 +64,10 @@ export class PixelController extends EventEmitter {
     this.connect();
   }
 
+  get id(): number {
+    return this._id
+  }
+
   get patternList(): PatternList {
     return this._patternList
   }
@@ -157,7 +161,7 @@ export class PixelController extends EventEmitter {
       RxOp.map((e: OpenEvent) => e),
       RxOp.take(1),
       RxOp.tap(() => {
-        console.log(`PixelController: Websocket connected to ${ this.address }`);
+        Util.vLog(`PixelController: Websocket connected to ${ this.address }`);
       }),
     )
   }
