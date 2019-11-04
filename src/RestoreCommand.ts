@@ -1,13 +1,14 @@
 // Restore patterns to a device
 
 import fs from "fs";
+import { from, observable } from "rxjs";
 import * as Rx from "rxjs";
 
 import DiscoveryAgent from './DiscoveryAgent'
 import { PixelController } from "./PixelController";
 import Util from './Util'
 
-class Restore {
+export default class RestoreCommand {
   private discoveryAgent: DiscoveryAgent;
 
   readPatternFromFile(dir: string, name: string, content: string): void {
@@ -35,35 +36,48 @@ class Restore {
   checkDir(rootDir: string, pbName: string): string {
     if (!fs.existsSync(rootDir)) {
       // ensure directory exists
-      throw `ERROR: Dir '${ rootDir }' does not exist`;
+      throw `ERROR: Root pb-sync directory '${ rootDir }' does not exist`;
     }
 
     const restoreDir = `${ rootDir }/${ pbName }`;
-    try {
-      fs.mkdirSync(restoreDir);
-    } catch (e) {
-      if (e.code === 'EEXIST') {
-        Util.vLog(`Restore.checkDir: Dir '${ restoreDir }' already exists`);
-      } else {
-        throw e;
-      }
+    if (!fs.existsSync(restoreDir)) {
+      // ensure directory exists
+      throw `ERROR: Data directory for PB '${ pbName }' does not exist at '${restoreDir}'`;
     }
+
     return restoreDir;
   }
 
   // Restore all patterns from one pixelblaze directory to a pixelblaze controller
-  restorePatterns() {
+  restorePatterns(fromName: string, toController: PixelController, dir: string, observer: Rx.Observer<void>) {
+    // persist one file at a time
+
+    const pbDataDir = this.checkDir(dir, fromName);
+
+    // first, load the list of patterns to persist (and metadata)
+    fs.readdirSync(pbDataDir).forEach(file => {
+      console.log('read file from data dir:', file);
+      console.log(file);
+    });
+
+
 
   }
 
-  // run(fromName: string, toName: string, dir: string): Rx.Observable<null> {
-  //   // read the file
-  //
-  //
-  //   // send file to pixelblaze
-  //   // easy, right?
-  // }
+  run(fromName: string, toName: string, dir: string): Rx.Observable<null> {
+    return new Rx.Observable((observer) => {
+      // read the files
+      // send files to pixelblaze
+      // easy, right?
+
+      console.log(`Restoring saved patterns from PB '${fromName}' to '${toName}'`);
+
+      this.discoveryAgent = new DiscoveryAgent;
+      this.discoveryAgent.start();
+
+      this.discoveryAgent.waitForPixelBlaze$(toName).subscribe((toController: PixelController) => {
+        this.restorePatterns(fromName, toController, dir, observer);
+      });
+    });
+  }
 }
-
-module.exports = {Restore};
-

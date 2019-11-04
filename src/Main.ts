@@ -1,5 +1,6 @@
 import { args as ARGS } from "./CLI";
 import ListCommand from "./ListCommand";
+import RestoreCommand from "./RestoreCommand";
 
 if (ARGS._.length == 0) {
   console.log('ERROR: no command provided');
@@ -20,7 +21,11 @@ if (command == 'backup') {
     process.exit(0)
   });
 } else if (command == 'restore') {
-  console.log('Not implemented')
+  const restoreCommand = new RestoreCommand;
+  restoreCommand.run(ARGS.fromName, ARGS.toName, ARGS.dir).subscribe(() => {
+    console.log('Waited 60s.  Shutting it down');
+    process.exit(0)
+  });
 } else if (command == 'list') {
   const listCommand = new ListCommand;
   listCommand.run().subscribe(() => {
