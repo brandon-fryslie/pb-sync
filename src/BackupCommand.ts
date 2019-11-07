@@ -11,6 +11,10 @@ const debug = require('debug')('BackupCommand');
 class BackupCommand {
   private discoveryAgent: DiscoveryAgent;
 
+  constructor() {
+    this.discoveryAgent = new DiscoveryAgent();
+  }
+
   writePatternToFile(dir: string, name: string, content: string): void {
     const path = Util.getPatternPath(dir, name);
     debug(`Backup.writePatternToFile: Writing pattern '${ name }' to path '${ path }'`);
@@ -88,7 +92,6 @@ class BackupCommand {
       const pbBackupDir = this.checkDir(dir, pbName);
       console.log(`Backup: Starting backup of Pixelblaze '${ pbName }' to dir '${ pbBackupDir }'`);
 
-      this.discoveryAgent = new DiscoveryAgent;
       this.discoveryAgent.start();
 
       return this.discoveryAgent.waitForPixelBlaze$(pbName).subscribe((controller) => {

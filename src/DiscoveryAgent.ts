@@ -2,7 +2,6 @@ import dgram, { Socket } from 'dgram'
 
 import * as Rx from 'rxjs'
 import * as RxOp from 'rxjs/operators'
-import Util from './Util'
 import { PixelController } from './PixelController'
 import { Observable } from "rxjs";
 import { AddressInfo } from "net";

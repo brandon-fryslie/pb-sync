@@ -4,9 +4,10 @@ export const args = yargs(process.argv.slice(2))
   .scriptName('pb-sync.sh')
   .command({
     command: 'backup <name> <dir>',
-    desc: 'sync Pixelblaze patterns to a directory',
-    builder: ((yargs) => {
-      yargs.positional('name', {
+    describe: 'sync Pixelblaze patterns to a directory',
+    handler: () => null,
+    builder: ((yargs: yargs.Argv<{}>) => {
+      return yargs.positional('name', {
         description: "the Pixelblaze's name",
         type: 'string',
         demandOption: true
@@ -19,9 +20,10 @@ export const args = yargs(process.argv.slice(2))
     })
   }).command({
     command: 'restore <dir> <fromName> <toName>',
-    desc: 'restore Pixelblaze patterns to a directory',
+    describe: 'restore Pixelblaze patterns to a directory',
+    handler: () => null,
     builder: ((yargs) => {
-      yargs.positional('dir', {
+      return yargs.positional('dir', {
         description: "the pb-sync data directory",
         type: 'string',
         demandOption: true,
@@ -37,7 +39,8 @@ export const args = yargs(process.argv.slice(2))
     })
   }).command({
     command: 'list',
-    desc: 'list discoverable Pixelblazes on the network',
+    describe: 'list discoverable Pixelblazes on the network',
+    handler: () => null,
   }).option('verbose', {
     alias: 'v',
     type: 'boolean',

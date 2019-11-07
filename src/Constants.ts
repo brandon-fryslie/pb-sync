@@ -1,4 +1,8 @@
-export const PacketType = {
+interface IPacketTypes {
+  [key: string]: number
+}
+
+export const PacketType: IPacketTypes = {
   SAVEPROGRAMSOURCEFILE: 1,
   CODEDATA: 3,
   THUMBNAILJPG: 4,

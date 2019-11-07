@@ -153,6 +153,7 @@ export class PixelController extends EventEmitter {
 
     // Let us know if we get some sort of known packet type so we can handle it properly
     this.unknownPacket$ = this.binaryPacket$.pipe(
+      // @ts-ignore
       RxOp.filter((data: Uint8Array) => data[0] === _.includes(Object.values(PacketType), data[0]))
     );
     this.unknownPacket$.subscribe(data => console.log(`PixelController: Unknown PacketType: ${ data[0] }`));

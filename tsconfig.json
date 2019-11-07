@@ -1,16 +1,24 @@
 {
   "compilerOptions": {
-    "target": "es2015",
+    "allowSyntheticDefaultImports": true,
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators":true,
     "lib": ["es2015"],
-    "types": ["reflect-metadata", "node"],
     "module": "commonjs",
     "moduleResolution": "node",
-    "experimentalDecorators":true,
-    "emitDecoratorMetadata": true,
     "sourceMap": true,
-    "declaration": false,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "strict": false, // not ready to implement this
+    "noImplicitAny": false, // not ready to implement this
+    "noImplicitThis": false,
+    "alwaysStrict": false,
+    "strictBindCallApply": false,
+    "strictNullChecks": false,
+    "strictFunctionTypes": false,  // not ready to implement this
+    "strictPropertyInitialization": false, // not ready to implement this
+    "target": "es2015",
+    "types": ["reflect-metadata", "node"]
   },
   "exclude": [
     "node_modules"
